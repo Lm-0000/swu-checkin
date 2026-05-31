@@ -1,8 +1,11 @@
 name: swu-check scheduled run
 
 on:
+  # Run daily at 21:10 Asia/Shanghai (Beijing) time.
+  # GitHub cron uses UTC, Beijing = UTC+8 → 21:10 CST = 13:10 UTC
   schedule:
     - cron: '10 13 * * *'
+  # Allow manual trigger
   workflow_dispatch:
 
 jobs:
@@ -17,19 +20,26 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Debug file structure
+      - name: Install dependencies (if present)
+        # installs dependencies from repository root requirements.txt if present
         run: |
-          echo "Root directory:"
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          
+      - name: List all files in repository
+        run: |
+          echo "=== Current directory ==="
+          pwd
+          echo "=== Root directory contents ==="
           ls -la
-          echo "Searching main.py:"
-          find . -name "main.py"
-
-      - name: Run python scripts/main.py
+          echo "=== Recursive find of all .py files ==="
+          find . -name "*.py"
+          echo "=== Check if scripts/ exists and its contents ==="
+          if [ -d "scripts" ]; then ls -la scripts/; else echo "scripts/ not found"; fi
+    
+      - name: Run scripts/main.py
         env:
           TZ: Asia/Shanghai
           SWU_USERNAME: ${{ secrets.SWU_USERNAME }}
           SWU_PASSWORD: ${{ secrets.SWU_PASSWORD }}
-        run: python scripts/main.py
+        run: |
+          python -u scripts/main.py
