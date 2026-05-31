@@ -32,4 +32,4 @@ jobs:
           TZ: Asia/Shanghai
           SWU_USERNAME: ${{ secrets.SWU_USERNAME }}
           SWU_PASSWORD: ${{ secrets.SWU_PASSWORD }}
-        run: python main.py
+        run: python scripts/main.py
