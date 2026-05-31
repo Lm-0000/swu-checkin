@@ -1,11 +1,8 @@
 name: swu-check scheduled run
 
 on:
-  # Run daily at 21:10 Asia/Shanghai (Beijing) time.
-  # GitHub cron uses UTC, Beijing = UTC+8 → 21:10 CST = 13:10 UTC
   schedule:
     - cron: '10 13 * * *'
-  # Allow manual trigger
   workflow_dispatch:
 
 jobs:
@@ -20,15 +17,13 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies (if present)
-        # installs dependencies from repository root requirements.txt if present
+      - name: Install dependencies
         run: |
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Run scripts/main.py
+      - name: Run main.py
         env:
           TZ: Asia/Shanghai
           SWU_USERNAME: ${{ secrets.SWU_USERNAME }}
           SWU_PASSWORD: ${{ secrets.SWU_PASSWORD }}
-        run: |
-          python -u scripts/main.py
+        run: python main.py
