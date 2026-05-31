@@ -27,7 +27,7 @@ jobs:
           echo "Searching main.py:"
           find . -name "main.py"
 
-      - name: Run main.py
+      - name: Run python scripts/main.py
         env:
           TZ: Asia/Shanghai
           SWU_USERNAME: ${{ secrets.SWU_USERNAME }}
