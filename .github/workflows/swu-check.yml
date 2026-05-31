@@ -18,19 +18,18 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          if [ -f scripts/requirements.txt ]; then pip install -r scripts/requirements.txt; fi
+        run: pip install -r requirements.txt
 
-      - name: Debug - list files
+      - name: Debug file structure
         run: |
-          pwd
+          echo "Root directory:"
           ls -la
-          ls -la scripts/ || echo "scripts/ not found"
+          echo "Searching main.py:"
+          find . -name "main.py"
 
       - name: Run main.py
         env:
           TZ: Asia/Shanghai
           SWU_USERNAME: ${{ secrets.SWU_USERNAME }}
           SWU_PASSWORD: ${{ secrets.SWU_PASSWORD }}
-        run: |
-          python -u scripts/main.py
+        run: python main.py
