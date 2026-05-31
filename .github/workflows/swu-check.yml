@@ -35,6 +35,15 @@ jobs:
           find . -name "*.py"
           echo "=== Check if scripts/ exists and its contents ==="
           if [ -d "scripts" ]; then ls -la scripts/; else echo "scripts/ not found"; fi
+          
+      - name: Debug credentials (masked)
+        run: |
+          echo "Username length: ${#SWU_USERNAME}"
+          echo "First 3 chars: ${SWU_USERNAME:0:3}***"
+          echo "Password length: ${#SWU_PASSWORD}"
+        env:
+          SWU_USERNAME: ${{ secrets.SWU_USERNAME }}
+          SWU_PASSWORD: ${{ secrets.SWU_PASSWORD }}
     
       - name: Run scripts/main.py
         env:
